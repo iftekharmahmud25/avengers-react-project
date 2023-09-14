@@ -6,6 +6,7 @@ const Home = () => {
   const [allActors,setAllActors] = useState([]);
   const [selectedActors, setSelectedActors] = useState([])
   const [totalCost,setTotalCost] = useState(0)
+  const [remaining,setRemaining] = useState(0)
 
   useEffect(()=>{
         fetch('avengers.json')
@@ -17,12 +18,28 @@ const Home = () => {
    const handleSelectActor = (actor) =>{
 
     const  isExists = selectedActors.find((item) => item.id === actor.id)
-      if(isExists){
+    let count = actor.salary;
+    
+    if(isExists){
          return alert('Already Exists')
       }
       else{
+       selectedActors.forEach((item) =>{
+           count = count + item.salary;
+       })
+       
+       const totalRemaining = 35000 - count;
+      
 
-        
+       if(count>35000){
+          return alert('You Can Not Adding More')
+       }
+       else{
+        setRemaining(totalRemaining)
+       }
+       setTotalCost(count)
+      
+             
         setSelectedActors([...selectedActors,actor])
       }
       
@@ -51,7 +68,7 @@ const Home = () => {
             }
              </div>
              <div className="">
-                <Cart selectedActors ={selectedActors} totalCost ={totalCost} > </Cart>
+                <Cart selectedActors ={selectedActors} totalCost ={totalCost} remaining={remaining} > </Cart>
              </div>
          </div>
 
